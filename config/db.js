@@ -6,7 +6,10 @@ const connectDB = async () => {
     try {
         //this returns a promise therefore needs to await 
         await mongoose.connect(db, {
-            useNewUrlParser: true
+            useNewUrlParser: true,
+            useCreateIndex: true,
+            useUnifiedTopology: true,
+
         });
         console.log('mongo db connected...');
     } catch (err){
