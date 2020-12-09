@@ -6,7 +6,7 @@ const app = express();//initializes app variable with express
 //connect Database
  connectDB();
 
- //init middleware
+ //init middleware - this one line allows us to get the data from req.body
 app.use(express.json({ extended: false }));
 
 app.get('/', (req, res) => res.send('API RUNNING'));//Checks if API is running
