@@ -5,6 +5,7 @@ const ProfileSchema = new mongoose.Schema({
          type: mongoose.Schema.Types.ObjectID,
          ref: 'user'
      },
+
      company: {
         type: String
       },

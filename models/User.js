@@ -1,3 +1,6 @@
+//This Model with it's Schema allows us to interact with the database
+// We use mongoose tool to create schema. Mongoose was installed as a node package
+
 const mongoose = require('mongoose');
 const UserSchema = new mongoose.Schema({
     name: {
@@ -7,6 +10,7 @@ const UserSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
+    // this is very important, bc this value will be used as unique key 
         unique: true
     },
     password: {

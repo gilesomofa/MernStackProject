@@ -2,11 +2,11 @@ const express = require('express');
 const router = express.Router();
 
 //bring in the middle ware 
-
 const auth = require('../../middleware/auth'); 
 
-//bring in the User model via mongoose from mongo
+//bring in the User model from mongo via mongoose 
 const User = require('../../models/User');
+
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const config = require('config'); 
@@ -24,7 +24,7 @@ router.get('/', auth, async (req, res) =>{
         const user = await User.findById(req.user.id).select('-password');
         res.json(user);   
         console.error(error.message);
-        res.status(500).send('Server Error ')
+        res.status(500).send('Ser ver Error ')
 }   catch(err){
 
 }

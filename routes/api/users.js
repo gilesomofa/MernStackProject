@@ -1,18 +1,23 @@
 const express = require('express');
 const router = express.Router();
-const {check, validationResult} = require("express-validator");
+const { check, validationResult } = require("express-validator");
 const User = require('../../models/User');
 const gravatar = require('gravatar');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+
+//below allows us to communicate between config where we access
+//jwtSecret and jwt.sign method
 const config = require('config'); 
 
-// Route         Post users/api
-// Description:  register user
-// Access level: Public
+// @Route         POST  api/users
+// @Description   register user
+// @Access level  Public
 router.post('/', [
     //this code is from validator package and handles validation of credentials
-    check('name', 'Name is required') .not().isEmpty(),  
+    check('name', 'Name is required') 
+    .not()
+    .isEmpty(),  
     check('email', 'Please enter a valid email address') .isEmail(),
     check('password', 'Password must be 6 or characters') .isLength({ min: 6 })
 ],
@@ -23,9 +28,12 @@ if(!errors.isEmpty()){
     return res.status(400).json({ errors: errors.array() });
 }   
 
+// Destructure req.body to pull information that is needed to verify
+
 const { name, email, password } = req.body;
 
-//verify that user's credentials arent' being used
+//verify that user's credentials arent' being used/user doesn't exist 
+//if user exists it's a bad request otherwise, continue 
 
 try {
     let user = await User.findOne({ email })
@@ -36,10 +44,13 @@ try {
 //bring in avatar
 
 const avatar = gravatar.url(email, {
-    size: '200',
+    s: '200',
     r: 'pg',
     d:'mm'
 })
+
+//create user instance 
+
 user = new User({
     name,
     email,
@@ -63,6 +74,7 @@ await user.save();
 
 
 //return Jwt 
+//define payload which and set it to the user.id that mongoose abstracts from MongoDB
 const payload = {
     user: {
         id: user.id

@@ -6,13 +6,14 @@ const Profile = require('../../models/Profiles');
 const User = require('../../models/User');
 
 // Get api/profile/me
-// get current uses profile
-// private
+// get current users profile
+// private 
 
-//this route will be a route for the user's profile 
+
+//this route will be for the user's profile 
 router.get('/me', auth,  async (req, res) => {
     try{
-        //write query to get values of user to be used to create user value in profile 
+        //write query to Mongo to get values of user to be used to create user value in profile 
         const profile = await  Profile.findOne({ user: req.user.id }).populate('user', ['name', 'avatar']); 
         if(!profile){
             return res.status(400).json({ msg: 'There is no profile for user' });
@@ -31,6 +32,8 @@ router.get('/me', auth,  async (req, res) => {
 
 router.post(
     '/', 
+    //the below brings in auth middleware to secure route and following that
+    //is the express validator method 'check' which validates user profile skills and status
     [
    auth, 
         [
@@ -63,9 +66,13 @@ async (req, res) => {
      } = req.body
      
      //Build profile object
+
      const profileFields = {};
+
+     //allow access to the user through req.user.id (which has token attached)
      profileFields.user = req.user.id;
-     if(company)  profileFields.company = company; 
+
+     if(company) profileFields.company = company; 
      if(website) profileFields.website = website;
      if(location) profileFields.location = location;
      if(bio) profileFields.bio = bio;
@@ -77,7 +84,9 @@ async (req, res) => {
      if(skills) {
      profileFields.skills = skills.split(',').map(skill => skill.trim());
 
-    }
+    } 
+    console.log(profileFields.skills)
+    res.send('hello')
     //Initialize social object 
     profileFields.social = {}
     if (youtube) profileFields.social.youtube = youtube;
@@ -89,8 +98,8 @@ async (req, res) => {
     try {
 
         //Remember, when using mongoose methods we get a promise
-        //Hence 'await' don't forget 
-        //Also, note findOneAndUpdate method and syntax
+        //Hence  'async'- 'await' - don't forget!!
+        //Also, note findOneAndUpdate mongoose method and syntax
 
         let profile = await Profile.findOne({ user: req.user.id });
 
@@ -112,10 +121,24 @@ async (req, res) => {
         res.json(profile)
 
     } catch(err) {
-        console.error(err.message);
+        console.error(err.message);  
         res.status(500).send('Server Error');
     }
 }
 ); 
+
+// @route  Get api/profile
+// @description  Get all profiles
+// @access P ublic
+
+router.get('/', async (req,res) =>{
+    try {
+        const profiles = await Profile.find().populate('user', [ 'name', 'avatar']);
+        res.json(profiles);  
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server Error')
+    }
+})
 
 module.exports = router;
