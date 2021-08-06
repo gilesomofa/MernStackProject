@@ -62,7 +62,7 @@ router.post(
 			facebook,
 			twitter,
 			instagram,
-			linkedin,
+			linkedin
 		} = req.body;
 
 		//Build profile object
@@ -193,11 +193,11 @@ router.put('/experience', [
 	 	.isEmpty() 
 
 ]], 
-async (req, res)=>{
+async (req, res)=> {
 	const errors = validationResult(req);
-	if(!error.isEmpty()){
+	if(!errors.isEmpty()){
 		return res.status(400).json({errors: errors.array()});
-	}
+	};
 const {
 	title,
 	company,

@@ -4,7 +4,7 @@ const db = config.get('mongoURI');//the mongoURI is the passkey to database
 
 const connectDB = async () => {
     try {
-        //this returns a promise therefore needs to await 
+        //this returns a promise therefore needs await 
         await mongoose.connect(db, {
             useNewUrlParser: true,
             useCreateIndex: true,

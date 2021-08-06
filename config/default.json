@@ -1,3 +1,4 @@
- {
-     "mongoURI" : "mongodb+srv://Giles123:Giles123@merndevproject.wu9yn.mongodb.net/<dbname>?retryWrites=true&w=majority", "jwtSecret": "mysecrettoken"
+{
+	"mongoURI": "mongodb+srv://Giles123:Giles123@merndevproject.wu9yn.mongodb.net/<dbname>?retryWrites=true&w=majority",
+	"jwtSecret": "mysecrettoken"
 }
